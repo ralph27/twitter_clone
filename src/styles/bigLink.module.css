@@ -1,0 +1,18 @@
+.big_link_wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: fit-content;
+    gap: 20px;
+    padding: 2% 5%;
+    border-radius: 20px;
+}
+
+.big_link_wrapper:hover {
+    background-color: rgba(231, 233, 234, .1);
+}
+
+.big_link_wrapper h1 {
+    font-size: 20px;
+    color: white
+}
