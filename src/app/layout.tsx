@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import LeftMenu from "./_components/LeftMenu";
+import PostWrapper from "./_components/PostWrapper";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -26,6 +27,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <TRPCReactProvider cookies={cookies().toString()}>
           <LeftMenu />
+          <PostWrapper />
           {children}
         </TRPCReactProvider>
       </body>

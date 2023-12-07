@@ -1,0 +1,8 @@
+.post_wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: red;
+  border-left: 430px solid white;
+  border-right: 430px solid white;
+}
