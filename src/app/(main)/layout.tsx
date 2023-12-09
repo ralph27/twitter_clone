@@ -4,7 +4,10 @@ import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
 
 import { TRPCReactProvider } from "~/trpc/react";
-import LeftMenu from "./_components/LeftMenu";
+import LeftMenu from "../_components/LeftMenu";
+import { UserProvider } from "~/context/userContext";
+import { any } from "zod";
+import { useState } from "react";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -24,10 +27,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <TRPCReactProvider cookies={cookies().toString()}>
-          <LeftMenu />
-          {children}
-        </TRPCReactProvider>
+        <UserProvider>
+          <TRPCReactProvider cookies={cookies().toString()}>
+            <LeftMenu />
+            {children}
+          </TRPCReactProvider>
+        </UserProvider>
       </body>
     </html>
   );

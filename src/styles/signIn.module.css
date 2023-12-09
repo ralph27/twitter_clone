@@ -1,0 +1,48 @@
+.container {
+  height: 100vh;
+  background-color: #242d34;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #000000;
+  border-radius: 15px;
+}
+
+.card_content {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 25px;
+  margin: 30px;
+}
+
+.sign_in_logo {
+  height: 2rem;
+}
+
+.card_content h1 {
+  color: white;
+}
+
+.card_content input {
+  width: 200px;
+  padding: 15px;
+  border: none;
+  transition: 0.1s;
+  background-color: #000000;
+  border: 2px solid white;
+  border-radius: 5px;
+  outline: none;
+  color: white;
+}
+
+.card_content input:focus {
+  border: 2px solid #1d9bf0;
+}
