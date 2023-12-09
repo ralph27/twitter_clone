@@ -1,22 +1,42 @@
 .left_menu_container {
-    height: 100%;
-    width: fit-content;
-    background-color: black;
-    position: fixed;
-    padding-left: 10%;
-    padding-top: 1%;
-    padding-right: 2%;
-    border-right: 1px solid rgba(255, 255, 255, 0.5);
+  height: 100%;
+  width: 28%;
+  background-color: black;
+  position: fixed;
+  padding-left: 10%;
+  padding-top: 1%;
+  padding-right: 2%;
+  border-right: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 .left_menu_container ul {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  margin-bottom: 10%;
 }
 
 .left_menu_logo {
-    height: 2rem;
-    padding-left: 4%;
-    margin-bottom: 10%;
+  height: 2rem;
+  padding-left: 4%;
+  margin-bottom: 10%;
+}
+
+.profile_section_wrapper {
+  position: relative;
+  left: 100%;
+  top: 55%;
+  transform: translate(-100%, -100%);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  color: white;
+  padding-bottom: 10px;
+  gap: 10px;
+}
+
+.profile_section_wrapper p {
+  font-size: 20px;
 }

@@ -1,9 +1,5 @@
-export default async function Home() {
-  return (
-    <main>
-      <div>
-        Home
-      </div>
-    </main>
-  );
+import React from 'react'
+
+export default function Page() {
+  return <div>Page</div>
 }

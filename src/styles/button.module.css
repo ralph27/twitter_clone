@@ -1,0 +1,34 @@
+.button {
+  border: none;
+  cursor: pointer;
+  padding: 10px 20px;
+  margin: 5px;
+  width: 100%;
+  border-radius: 30px;
+  font-size: 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+}
+
+.button:hover {
+  background-color: #1a91da;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.3);
+}
+
+.small {
+  font-size: 12px;
+  padding: 5px 15px;
+}
+
+.medium {
+  font-size: 16px;
+  padding: 10px 20px;
+}
+
+.large {
+  font-size: 20px;
+  padding: 15px 25px;
+}
