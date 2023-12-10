@@ -28,7 +28,8 @@ model Post {
     userId    String    @db.ObjectId
     Like      Like[]
     Comment   Comment[]
-    ViewCount Int
+    viewCount Int
+    createdAt DateTime  @default(now())
 }
 
 model Like {

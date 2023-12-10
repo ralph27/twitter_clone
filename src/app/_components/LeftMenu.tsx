@@ -8,7 +8,7 @@ import Image from 'next/image'
 import { FaUser } from 'react-icons/fa'
 import { useRouter } from 'next/navigation'
 
-export default async function LeftMenu() {
+export default function LeftMenu() {
   const { user, setUser } = useContext(UserContext)
   const router = useRouter()
 
@@ -21,7 +21,7 @@ export default async function LeftMenu() {
   }
 
   return (
-    <main className={styles.left_menu_container}>
+    <div className={styles.left_menu_container}>
       <svg
         fill="rgba(231,233,234,1.00)"
         className={styles.left_menu_logo}
@@ -63,6 +63,6 @@ export default async function LeftMenu() {
           <FaUser size={30} onClick={handleClick} />
         )}
       </div>
-    </main>
+    </div>
   )
 }

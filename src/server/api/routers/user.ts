@@ -55,8 +55,8 @@ export const userRouter = createTRPCRouter({
         }
       }
 
-      const passwordMatch = bcrypt.compare(input.password, user.password)
-
+      const passwordMatch = await bcrypt.compare(input.password, user.password)
+      console.log(passwordMatch)
       if (!passwordMatch) {
         error = 'Incorrect Credentials'
         return {

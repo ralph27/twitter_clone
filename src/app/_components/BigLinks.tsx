@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import styles from '../../styles/bigLink.module.css'
 
-export default async function BigLink({
+export default function BigLink({
   title,
   page,
   children

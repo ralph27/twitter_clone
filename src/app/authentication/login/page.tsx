@@ -4,7 +4,8 @@ import styles from '../../../styles/login.module.css'
 import Button from '~/app/_components/Button'
 import { login } from '~/util/Validation'
 import { useRouter } from 'next/navigation'
-import { IUser, UserContext } from '~/contexts/UserContext'
+import { UserContext } from '~/contexts/UserContext'
+import Link from 'next/link'
 
 interface IUserLogin {
   username: string
@@ -41,7 +42,7 @@ export default function Page() {
 
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault()
-    console.log(e)
+    setError('')
     if (!userForm.username || !userForm.password) {
       setError('Please enter both username and password')
       return
@@ -79,6 +80,9 @@ export default function Page() {
             onChange={(e) => onChange('password', e.target.value)}
             type="password"
           />
+          <Link href={'/authentication/signup'} className={styles.no_account}>
+            Create An Account
+          </Link>
           <Button
             text="Log In"
             backgroundColor="#1DA1F2"

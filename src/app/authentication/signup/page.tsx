@@ -5,6 +5,7 @@ import styles from '../../../styles/signup.module.css'
 import { useRouter } from 'next/navigation'
 import { signup } from '~/util/Validation'
 import { IUserReturned } from '../login/page'
+import Link from 'next/link'
 
 export interface IUserSignup {
   username: string
@@ -90,6 +91,9 @@ export default function Signup() {
             value={user.confirmPassword}
             onChange={(e) => onChange('confirmPassword', e.target.value)}
           />
+          <Link href="/authentication/login" className={styles.no_account}>
+            Already Have An Account?
+          </Link>
           <Button
             text="Sign Up"
             backgroundColor="#1DA1F2"
