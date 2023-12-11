@@ -21,7 +21,6 @@ export default function MainPage() {
       enabled: !!user.id,
       refetchOnWindowFocus: false,
       onSuccess: (newData) => {
-        console.log('ON SUCCESS PAGE', page)
         setAllPosts((currentPosts) => [
           ...currentPosts,
           ...newData.response.posts
@@ -33,7 +32,7 @@ export default function MainPage() {
   )
   return (
     <div className={styles.main_container}>
-      <TextArea setAllPosts={setAllPosts} />
+      <TextArea setAllPosts={setAllPosts} type="post" />
       {user.id ? (
         <PostContainer
           data={allPosts || []}

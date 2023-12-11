@@ -5,6 +5,7 @@ export interface IUser {
   username: string | null
   id: string | null
   image?: string | null
+  following: string[]
 }
 
 export interface IUserContext {
@@ -13,7 +14,7 @@ export interface IUserContext {
 }
 
 export const UserContext = createContext<IUserContext>({
-  user: { username: '', id: '', image: '' },
+  user: { username: '', id: '', image: '', following: [] },
   setUser: () => {}
 })
 
@@ -21,7 +22,8 @@ export default function UserProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<IUser>({
     username: null,
     id: null,
-    image: null
+    image: null,
+    following: []
   })
 
   return (

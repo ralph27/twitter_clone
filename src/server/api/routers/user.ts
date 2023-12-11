@@ -44,6 +44,13 @@ export const userRouter = createTRPCRouter({
       const user = await ctx.db.user.findUnique({
         where: {
           name: input.username
+        },
+        select: {
+          following: true,
+          name: true,
+          id: true,
+          image: true,
+          password: true
         }
       })
 
@@ -56,7 +63,6 @@ export const userRouter = createTRPCRouter({
       }
 
       const passwordMatch = await bcrypt.compare(input.password, user.password)
-      console.log(passwordMatch)
       if (!passwordMatch) {
         error = 'Incorrect Credentials'
         return {
@@ -70,8 +76,94 @@ export const userRouter = createTRPCRouter({
         response: {
           username: user.name,
           id: user.id,
-          image: user.image
+          image: user.image,
+          following: user.following
         }
       }
+    }),
+
+  getTrendingUsers: publicProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      const posts = await ctx.db.post.findMany({
+        where: {
+          userId: {
+            notIn: [input]
+          }
+        },
+        select: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              image: true
+            }
+          },
+          viewCount: true
+        }
+      })
+
+      const userViewCounts = posts.reduce((acc, post) => {
+        if (post.user) {
+          acc[post.user.id] = (acc[post.user.id] || 0) + post.viewCount
+        }
+        return acc
+      }, {} as Record<string, number>)
+
+      const sortedUserIds = Object.entries(userViewCounts)
+        .sort((a, b) => b[1] - a[1])
+        .map(([userId]) => userId)
+        .slice(0, 4)
+
+      const trendingUsers = await ctx.db.user.findMany({
+        where: {
+          id: {
+            in: sortedUserIds
+          }
+        },
+        select: {
+          image: true,
+          name: true,
+          id: true
+        }
+      })
+
+      return trendingUsers
+    }),
+
+  followUser: publicProcedure
+    .input(z.object({ followerId: z.string(), followeeId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const response = await ctx.db.follow.create({
+        data: {
+          followee: {
+            connect: {
+              id: input.followeeId
+            }
+          },
+          follower: {
+            connect: {
+              id: input.followerId
+            }
+          }
+        }
+      })
+
+      return response
+    }),
+
+  unfollowUser: publicProcedure
+    .input(z.object({ followerId: z.string(), followeeId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const response = await ctx.db.follow.delete({
+        where: {
+          followerId_followeeId: {
+            followeeId: input.followeeId,
+            followerId: input.followerId
+          }
+        }
+      })
+
+      return response
     })
 })

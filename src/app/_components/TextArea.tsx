@@ -3,8 +3,8 @@ import React, { SetStateAction, useContext, useState } from 'react'
 import styles from '../../styles/textarea.module.css'
 import Button from './Button'
 import { IoMdPhotos } from 'react-icons/io'
-import { createPost } from '~/util/Validation'
-import { UserContext } from '~/contexts/UserContext'
+import { createComment, createPost } from '~/util/Validation'
+import { IUser, UserContext } from '~/contexts/UserContext'
 import { useRouter } from 'next/navigation'
 import { IPost } from './PostContainer'
 
@@ -14,9 +14,13 @@ export interface IPostState {
 }
 
 function TextArea({
-  setAllPosts
+  setAllPosts,
+  type,
+  postId
 }: {
   setAllPosts: React.Dispatch<SetStateAction<IPost[]>>
+  type: 'post' | 'comment'
+  postId?: string
 }) {
   const [post, setPost] = useState<IPostState>({
     content: '',
@@ -34,23 +38,36 @@ function TextArea({
       return router.push('/authentication/login')
     }
 
-    const { response } = await createPost({
-      content: post.content,
-      image: post.image,
-      userId: user.id
-    })
-    setPost({ content: '', image: '' })
+    if (type === 'post') {
+      const { response } = await createPost({
+        content: post.content,
+        image: post.image,
+        userId: user.id
+      })
 
-    if (response) {
-      setAllPosts((currentPosts) => [response, ...currentPosts])
+      if (response) {
+        setAllPosts((currentPosts) => [response, ...currentPosts])
+      }
+    } else if (type === 'comment' && postId) {
+      const { response } = await createComment({
+        content: post.content,
+        image: post.image,
+        userId: user.id,
+        postId
+      })
+
+      if (response) {
+        setAllPosts((currentPosts) => [response, ...currentPosts])
+      }
     }
+    setPost({ content: '', image: '' })
   }
 
   return (
     <div className={styles.textarea_container}>
       <textarea
         className={styles.textarea}
-        placeholder="What's happening?!"
+        placeholder={type === 'post' ? "What's happening?!" : 'Post a Reply'}
         onChange={(e) => setPost({ ...post, content: e.target.value })}
         value={post.content}
       ></textarea>

@@ -12,12 +12,12 @@ export interface IPost {
     name: string | null
     image: string | null
   }
-  _count: {
+  _count?: {
     Comment: number
     Like: number
   }
-  likedByUser: boolean
-  viewCount: number
+  likedByUser?: boolean
+  viewCount?: number
   createdAt: Date
 }
 
@@ -40,7 +40,7 @@ export default function PostContainer({
         {data.length > 0 &&
           data.map((post) => (
             <div>
-              <Post data={post} />
+              <Post key={post.id} data={post} />
             </div>
           ))}
       </div>

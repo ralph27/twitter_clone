@@ -14,7 +14,7 @@ export default function LeftMenu() {
 
   const handleClick = async () => {
     if (user.id) {
-      setUser({ id: '', username: '', image: '' })
+      setUser({ id: '', username: '', image: '', following: [] })
     } else {
       router.push('authentication/login')
     }

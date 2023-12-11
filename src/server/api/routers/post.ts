@@ -121,6 +121,61 @@ export const postRouter = createTRPCRouter({
       }
     }),
 
+  getPostDetails: publicProcedure
+    .input(z.object({ postId: z.string(), userId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      try {
+        const response = await ctx.db.post.findUnique({
+          where: {
+            id: input.postId
+          },
+          include: {
+            user: {
+              select: {
+                password: false,
+                name: true,
+                image: true
+              }
+            },
+            _count: {
+              select: {
+                Comment: true,
+                Like: true
+              }
+            },
+
+            Like: {
+              where: {
+                userId: input.userId
+              },
+              select: {
+                id: true
+              }
+            }
+          }
+        })
+
+        if (response) {
+          await postRouter.updateViewCounts({
+            ctx,
+            path: 'post.updateViewCounts',
+            rawInput: [input.postId],
+            type: 'mutation'
+          })
+
+          return {
+            response: { ...response, likedByUser: response.Like.length > 0 },
+            error: null
+          }
+        }
+      } catch (e) {
+        return {
+          response: null,
+          error: e
+        }
+      }
+    }),
+
   updateViewCounts: publicProcedure
     .input(z.array(z.string()))
     .mutation(async ({ ctx, input }) => {

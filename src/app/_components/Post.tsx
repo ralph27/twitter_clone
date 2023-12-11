@@ -10,7 +10,7 @@ import { dislikePost, likePost } from '~/util/Validation'
 import { UserContext } from '~/contexts/UserContext'
 import Link from 'next/link'
 
-function timeSince(date: Date) {
+export function timeSince(date: Date) {
   const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000)
 
   let interval = seconds / 31536000
@@ -36,67 +36,79 @@ function timeSince(date: Date) {
   return Math.floor(seconds) + ' s'
 }
 
-function Post({ data }: { data: IPost }) {
+function Post({ data }: { data: IPost | undefined }) {
   const { user } = useContext(UserContext)
   const [post, setPost] = useState(data)
 
   const handleLike = async () => {
-    if (user.id && !post.likedByUser) {
+    if (post && user.id && !post?.likedByUser) {
       await likePost({ postId: post.id, userId: user.id })
-      setPost((prev) => ({
-        ...prev,
-        _count: {
-          ...prev._count,
-          Like: prev._count.Like + 1
-        },
-        likedByUser: true
-      }))
-    } else if (user.id && post.likedByUser) {
+      setPost((prev) => {
+        if (prev?._count) {
+          return {
+            ...prev,
+            _count: {
+              ...prev._count,
+              Like: prev._count.Like + 1
+            },
+            likedByUser: true
+          }
+        }
+      })
+    } else if (user.id && post?.likedByUser) {
       await dislikePost({ postId: post.id, userId: user.id })
-      setPost((prev) => ({
-        ...prev,
-        _count: {
-          ...prev._count,
-          Like: prev._count.Like - 1
-        },
-        likedByUser: false
-      }))
+      setPost((prev) => {
+        if (prev?._count) {
+          return {
+            ...prev,
+            _count: {
+              ...prev._count,
+              Like: prev._count.Like - 1
+            },
+            likedByUser: false
+          }
+        }
+      })
     }
   }
 
   return (
-    <Link href={`/main/post/${post.id}`} className={styles.post_container}>
+    <Link href={`/main/post/${post?.id}`} className={styles.post_container}>
       <div>
-        {post.user.image ? (
-          <Image src={post.user.image} alt="user profile picture" />
+        {post?.user.image ? (
+          <Image src={post?.user.image} alt="user profile picture" />
         ) : (
           <FaUser size={20} fill="white" />
         )}
       </div>
       <div className={styles.post_content_container}>
         <div className={styles.post_upper}>
-          <p className={styles.post_username}>{post.user.name}</p>
+          <p className={styles.post_username}>{post?.user.name}</p>
           <span>&nbsp;·&nbsp;</span>
-          <p className={styles.post_timestamp}>{timeSince(post.createdAt)}</p>
+          {post && (
+            <p className={styles.post_timestamp}>
+              {timeSince(post?.createdAt)}
+            </p>
+          )}
         </div>
-        <p className={styles.post_content}>{post.content}</p>
-        {post.image && <Image src={post.image} alt="" />}
+        <p className={styles.post_content}>{post?.content}</p>
+        {post?.image && <Image src={post.image} alt="" />}
         <div className={styles.post_lower_cta}>
           <div>
             <FaRegComment fill="rgba(255, 255, 255, 0.5)" />
-            <p>{post._count.Comment}</p>
+            <p>{post?._count?.Comment}</p>
           </div>
           <div onClick={handleLike}>
-            {post.likedByUser ? (
+            {post?.likedByUser ? (
               <FaHeart fill="red" />
             ) : (
               <FaRegHeart fill="rgba(255, 255, 255, 0.5)" />
             )}
-            <p>{post._count.Like}</p>
+            <p>{post?._count?.Like}</p>
           </div>
           <div>
             <MdOutlineBarChart fill="rgba(255, 255, 255, 0.5)" />
-            <p>{post.viewCount}</p>
+            <p>{post?.viewCount}</p>
           </div>
         </div>
       </div>
