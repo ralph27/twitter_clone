@@ -11,15 +11,19 @@ datasource db {
 }
 
 model User {
-    id        String    @id @default(auto()) @map("_id") @db.ObjectId
-    name      String?   @unique
-    password  String
-    image     String?
-    Post      Post[]
-    Like      Like[]
-    Comment   Comment[]
-    followers Follow[]  @relation("FollowFollower")
-    following Follow[]  @relation("FollowFollowee")
+    id                String    @id @default(auto()) @map("_id") @db.ObjectId
+    name              String?   @unique
+    password          String
+    image             String?
+    Post              Post[]
+    Like              Like[]
+    Comment           Comment[]
+    followers         String[]
+    following         String[]
+    listsAsMember     List[]    @relation(fields: [listAsMemberIds], references: [id], name: "member")
+    listAsMemberIds   String[]  @db.ObjectId
+    listsAsCreator    List[]    @relation(name: "creator")
+    listsAsCreatorIds String[]  @db.ObjectId
 }
 
 model Post {
@@ -55,14 +59,12 @@ model Comment {
     createdAt DateTime @default(now())
 }
 
-model Follow {
-    id        String   @id @default(auto()) @map("_id") @db.ObjectId
-    createdAt DateTime @default(now())
-    follower  User     @relation("FollowFollower", fields: [followerId], references: [id])
-    followee  User     @relation("FollowFollowee", fields: [followeeId], references: [id])
-
-    followerId String @db.ObjectId
-    followeeId String @db.ObjectId
-
-    @@unique([followerId, followeeId])
+model List {
+    id         String   @id @default(auto()) @map("_id") @db.ObjectId
+    createdAt  DateTime @default(now())
+    members    User[]   @relation(fields: [membersIds], references: [id], name: "member")
+    membersIds String[] @db.ObjectId
+    creator    User     @relation(fields: [creatorId], references: [id], name: "creator")
+    creatorId  String   @db.ObjectId
+    name       String
 }

@@ -16,7 +16,7 @@ export default function LeftMenu() {
     if (user.id) {
       setUser({ id: '', username: '', image: '', following: [] })
     } else {
-      router.push('authentication/login')
+      router.push('http://localhost:3000/authentication/login')
     }
   }
 
@@ -49,7 +49,7 @@ export default function LeftMenu() {
           </BigLink>
         </li>
         <li>
-          <BigLink title="Lists" page="lists">
+          <BigLink title="Lists" page="main/lists">
             <GoChecklist size={30} fill="white" />
           </BigLink>
         </li>

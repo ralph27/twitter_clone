@@ -54,9 +54,32 @@ export const postRouter = createTRPCRouter({
 
   getRecentPosts: publicProcedure
     .input(
-      z.object({ page: z.number(), pageSize: z.number(), userId: z.string() })
+      z.object({
+        page: z.number(),
+        pageSize: z.number(),
+        userId: z.string(),
+        filter: z.string().optional()
+      })
     )
     .query(async ({ ctx, input }) => {
+      const whereCondition = !input.filter
+        ? {}
+        : input.filter === 'following'
+        ? {
+            user: {
+              followers: {
+                hasSome: [input.userId]
+              }
+            }
+          }
+        : {
+            user: {
+              id: {
+                in: [input.filter]
+              }
+            }
+          }
+
       try {
         const skip = (input.page - 1) * input.pageSize
         const limit = input.pageSize
@@ -64,6 +87,7 @@ export const postRouter = createTRPCRouter({
           orderBy: { createdAt: 'desc' },
           take: limit + 1,
           skip,
+          where: whereCondition,
           include: {
             user: {
               select: {

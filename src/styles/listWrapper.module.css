@@ -1,0 +1,30 @@
+.list_wrapper {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.list_wrapper p {
+  font-weight: bold;
+  padding: 2% 3%;
+}
+
+.list_wrapper p.active {
+  padding-bottom: 0;
+}
+
+.list_wrapper p:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.list_wrapper p.active:after {
+  content: '';
+  width: 100%;
+  margin: 0 auto;
+  margin-top: 8px;
+  display: block;
+  background-color: #1da1f2;
+  height: 3px;
+}

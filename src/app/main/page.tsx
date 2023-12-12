@@ -7,20 +7,23 @@ import { useQuery } from '@tanstack/react-query'
 import { getRecentPost } from '~/util/Validation'
 import TextArea from '../_components/TextArea'
 import Button from '../_components/Button'
+import ListWrapper from '../_components/ListWrapper'
 
 export default function MainPage() {
   const [page, setPage] = useState(1)
   const [allPosts, setAllPosts] = useState<IPost[]>([])
   const [hasMore, setHasMore] = useState<boolean>(true)
+  const [filter, setFilter] = useState<string | undefined>()
   const { user } = useContext(UserContext)
 
-  const { data, error, isLoading } = useQuery(
-    ['posts', page, 10],
-    () => getRecentPost({ page, pageSize: 10, userId: user.id }),
+  const { isLoading } = useQuery(
+    ['posts', page, 10, filter],
+    () => getRecentPost({ page, pageSize: 10, userId: user.id, filter }),
     {
       enabled: !!user.id,
       refetchOnWindowFocus: false,
       onSuccess: (newData) => {
+        console.log('new Data', newData)
         setAllPosts((currentPosts) => [
           ...currentPosts,
           ...newData.response.posts
@@ -30,8 +33,15 @@ export default function MainPage() {
       }
     }
   )
+
+  function handleFilter(filterId: string) {
+    setAllPosts([])
+    setFilter(filterId)
+  }
+
   return (
     <div className={styles.main_container}>
+      <ListWrapper filter={filter || ''} setFilter={handleFilter} />
       <TextArea setAllPosts={setAllPosts} type="post" />
       {user.id ? (
         <PostContainer

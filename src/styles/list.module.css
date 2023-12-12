@@ -1,0 +1,28 @@
+.list_container {
+  min-height: 100vh;
+  background-color: black;
+  color: white;
+  border-right: 1px solid rgba(255, 255, 255, 0.4);
+  margin-left: 28%;
+  width: 40%;
+}
+
+.list_container_upper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3%;
+}
+
+.list_container_title {
+  font-weight: bold;
+  font-size: 20px;
+  margin-left: 3%;
+}
+
+.list_wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3%;
+}

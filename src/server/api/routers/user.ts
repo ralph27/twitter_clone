@@ -134,17 +134,24 @@ export const userRouter = createTRPCRouter({
   followUser: publicProcedure
     .input(z.object({ followerId: z.string(), followeeId: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const response = await ctx.db.follow.create({
+      const response = await ctx.db.user.update({
+        where: {
+          id: input.followerId
+        },
         data: {
-          followee: {
-            connect: {
-              id: input.followeeId
-            }
-          },
-          follower: {
-            connect: {
-              id: input.followerId
-            }
+          following: {
+            push: input.followeeId
+          }
+        }
+      })
+
+      await ctx.db.user.update({
+        where: {
+          id: input.followeeId
+        },
+        data: {
+          followers: {
+            push: input.followerId
           }
         }
       })
@@ -155,15 +162,50 @@ export const userRouter = createTRPCRouter({
   unfollowUser: publicProcedure
     .input(z.object({ followerId: z.string(), followeeId: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const response = await ctx.db.follow.delete({
+      const follower = await ctx.db.user.findUnique({
         where: {
-          followerId_followeeId: {
-            followeeId: input.followeeId,
-            followerId: input.followerId
-          }
+          id: input.followeeId
+        },
+        select: {
+          followers: true
         }
       })
 
-      return response
+      const updatedFollowers = follower?.followers.filter(
+        (id) => id != input.followerId
+      )
+
+      await ctx.db.user.update({
+        where: {
+          id: input.followeeId
+        },
+        data: {
+          followers: updatedFollowers
+        }
+      })
+
+      const followee = await ctx.db.user.findFirst({
+        where: {
+          id: input.followerId
+        },
+        select: {
+          following: true
+        }
+      })
+
+      const updatedFollowing = followee?.following.filter(
+        (id) => id != input.followeeId
+      )
+
+      await ctx.db.user.update({
+        where: {
+          id: input.followerId
+        },
+        data: {
+          following: updatedFollowing
+        }
+      })
+
+      return follower
     })
 })

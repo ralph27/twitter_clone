@@ -28,6 +28,7 @@ export default function UserCard(userCard: any) {
   }
 
   useEffect(() => {
+    console.log('USER FOLLOWING', user.following)
     if (user.following.includes(userCard.userCard.id)) {
       setFollowing(true)
     } else {

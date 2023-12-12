@@ -31,20 +31,24 @@ export const createPost = async ({ content, image, userId }: IPostPayload) => {
 export const getRecentPost = async ({
   page,
   pageSize,
-  userId
+  userId,
+  filter
 }: {
   page: number
   pageSize: number
   userId: string | null
+  filter?: string
 }) => {
   if (userId) {
     const response = await api.post.getRecentPosts.query({
       page,
       pageSize,
-      userId
+      userId,
+      filter
     })
     return response
   }
+
   throw 'User Not Logged In'
 }
 
@@ -147,5 +151,10 @@ export const unfollowUser = async ({
     followeeId,
     followerId
   })
+  return response
+}
+
+export const getLists = async ({ userId }: { userId: string }) => {
+  const response = await api.list.getLists.query({ userId })
   return response
 }
